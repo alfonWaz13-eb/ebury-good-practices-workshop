@@ -5,12 +5,6 @@ class FXDealProcessor:
 
     def __init__(self):
         self.deals = []
-        self.db_connection = 'db_connection_string'
-        self.exchange_rates = {
-            'EUR/USD': 1.08,
-            'GBP/EUR': 1.17,
-            'USD/GBP': 0.79
-        }
 
     def add_deal(self, deal_data):
         deal = {
@@ -43,15 +37,19 @@ class FXDealProcessor:
             return False
         if deal['amount'] > 1000000:
             return False
-        if deal['currency_pair'] not in self.exchange_rates:
-            return False
         return True
 
     def _get_exchange_rate(self, currency_pair):
-        return self.exchange_rates.get(currency_pair, 1.0)
+        exchange_rates = {
+            'EUR/USD': 1.08,
+            'GBP/EUR': 1.17,
+            'USD/GBP': 0.79
+        }
+        return exchange_rates.get(currency_pair, 1.0)
 
     def _save_to_database(self, deal):
-        print(f"Saving {deal['id']} to database: {self.db_connection}")
+        db_connection = 'db_connection_string'
+        print(f"Saving {deal['id']} to database: {db_connection}")
 
     def _send_confirmation_email(self, deal):
         print(f"Sending email to: {deal['client_email']}")
