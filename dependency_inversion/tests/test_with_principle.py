@@ -8,15 +8,17 @@ class TestFundsAssignationService:
     def setup_method(self):
         self.mock_database = MagicMock()
         self.mock_notification_service = MagicMock()
+
+        self.mock_database.get_account_balance.return_value = 100000.0
+        self.mock_database.save_assignation.return_value = True
+        self.mock_notification_service.send_funds_assignation_notification.return_value = True
+
         self.service = FundsAssignationService(
             database=self.mock_database,
             notification_service=self.mock_notification_service
         )
 
     def test_assign_funds_successfully_when_account_has_sufficient_balance(self):
-        self.mock_database.get_account_balance.return_value = 100000.0
-        self.mock_database.save_assignation.return_value = True
-        self.mock_notification_service.send_funds_assignation_notification.return_value = True
 
         assignation_data = {
             'from_account': 'ACC001',
@@ -54,7 +56,6 @@ class TestFundsAssignationService:
         self.mock_notification_service.send_funds_assignation_notification.assert_not_called()
 
     def test_assign_funds_fails_when_amount_is_negative(self):
-        self.mock_database.get_account_balance.return_value = 100000.0
 
         assignation_data = {
             'from_account': 'ACC001',
@@ -88,9 +89,6 @@ class TestFundsAssignationService:
         self.mock_notification_service.send_funds_assignation_notification.assert_not_called()
 
     def test_assign_funds_successfully_with_custom_currency(self):
-        self.mock_database.get_account_balance.return_value = 100000.0
-        self.mock_database.save_assignation.return_value = True
-        self.mock_notification_service.send_funds_assignation_notification.return_value = True
 
         assignation_data = {
             'from_account': 'ACC001',
