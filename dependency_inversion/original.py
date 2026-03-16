@@ -31,12 +31,12 @@ class FundsAssignationService:
 
     def assign_funds(self, assignation_data):
         assignation = {
-            'id': len(self.assignations) + 1,
+            'id': assignation_data['identifier'],
             'from_account': assignation_data['from_account'],
             'to_account': assignation_data['to_account'],
             'amount': assignation_data['amount'],
             'currency': assignation_data.get('currency', 'EUR'),
-            'client_email': assignation_data['client_email'],
+            'client_email': assignation_data['email'],
             'reason': assignation_data.get('reason', 'Fund transfer'),
         }
 
